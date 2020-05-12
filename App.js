@@ -1,113 +1,140 @@
 import React from 'react';
-import { StyleSheet, Button, Text, TextInput, View } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
+import WriteScreen from './screens/WriteScreen';
+import LoginScreen from './screens/LoginScreen';
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+import AuthContext from './AuthContext';
+
 import axios from 'axios';
 
-// storeData = async () => {
-//   try {
-//     await AsyncStorage.setItem('@storage_Key', 'stored value')
-//   } catch (e) {
-//     console.error('Error while saving a value to storage')
-//   }
-// }
+const Stack = createStackNavigator();
 
-// getData = async () => {
-//   try {
-//     const value = await AsyncStorage.getItem('@storage_Key')
-//     if(value !== null) {
-//       // value previously stored
-//     }
-//   } catch(e) {
-//     console.error('Error while getting a value from storage')
-//   }
-// }
+export default function App({ navigation }) {
 
-const DisplayErrorMessage = (props) => {
-  if (props.errorMessage)
-    return <Text style={{color: 'red', paddingBottom: 20}}>
-      {props.errorMessage}
-    </Text>
-
-  return null
-}
-
-export default function App() {
-  const [email, onChangeEmail] = React.useState('');
-  const [password, onChangePassword] = React.useState('');
-  const [errorMessage, setErrorMessage] = React.useState(false);
-
-  const loginFn = () => {
-    if (email && password) {
-      axios.post('http://localhost:3000/api/Customers/login', {
-        email,
-        password
-      })
-        .then(async data => {
-          console.log('You are login')
-          // console.log(data.data.id)
-          await AsyncStorage.setItem('@app_key', data.data.id)
-          console.log('key stored in storage')
-        })
-        .catch(error => {
-          // todo: how to get a error.message value?
-          setErrorMessage('Wrong credentials')
-          // hide message after 1 second
-          setTimeout(() => setErrorMessage(false), 2000);
-        })
+  const [state, dispatch] = React.useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case 'RESTORE_TOKEN':
+          return {
+            ...prevState,
+            userToken: action.token,
+            isLoading: false,
+          };
+        case 'SIGN_IN':
+          return {
+            ...prevState,
+            isSignout: false,
+            userToken: action.token,
+          };
+        case 'SIGN_OUT':
+          return {
+            ...prevState,
+            isSignout: true,
+            userToken: null,
+          };
+      }
+    },
+    {
+      isLoading: true,
+      isSignout: false,
+      userToken: null,
     }
-  }
+  );
+
+  React.useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const bootstrapAsync = async () => {
+      let userToken;
+
+      try {
+        userToken = await AsyncStorage.getItem('@user_key');
+        console.log('UserToken: ' + userToken)
+      } catch (e) {
+        console.error(e);
+        // Restoring token failed
+      }
+
+      // After restoring token, we may need to validate it in production apps
+
+      // This will switch to the App screen or Auth screen and this loading
+      // screen will be unmounted and thrown away.
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+    };
+
+    bootstrapAsync();
+  }, []);
+
+  const authContext = React.useMemo(
+    () => ({
+        signIn: async (email, password) => {
+
+          // console.log('Sign in! ' + data)
+            // In a production app, we need to send some data (usually username, password) to server and get a token
+            // We will also need to handle errors if sign in failed
+            // After getting token, we need to persist the token using `AsyncStorage`
+            // In the example, we'll use a dummy token
+
+            if (email && password) {
+              axios.post('http://localhost:3000/api/Customers/login', {
+                email,
+                password
+              })
+                  .then(async data => {
+                      console.log('You are login')
+
+                      // console.log(data.data.id)
+                      // await AsyncStorage.setItem('@user_key', data.data.id)
+                      // console.log('key stored in storage')
+  
+                      // navigation.navigate('Write')
+  
+                      // signIn({ username, password })
+
+                      dispatch({ type: 'SIGN_IN', token: data.data.id });
+                  })
+                  .catch(error => {
+                      // todo: how to get a error.message value?
+                      // setErrorMessage('Wrong credentials')
+                      // hide message after 1 second
+                      // setTimeout(() => setErrorMessage(false), 2000);
+
+                      console.error(error);
+                  })
+            } else {
+              console.log('fill the credentials')
+            }
+
+            // dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        },
+        signOut: () => dispatch({ type: 'SIGN_OUT' }),
+        signUp: async data => {
+            // In a production app, we need to send user data to server and get a token
+            // We will also need to handle errors if sign up failed
+            // After getting token, we need to persist the token using `AsyncStorage`
+            // In the example, we'll use a dummy token
+
+            dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        },
+    }),
+    []
+);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>MyDiary</Text>
-      <Text style={styles.label}>Enter your credentials</Text>
-      <DisplayErrorMessage errorMessage={errorMessage}/>
-      <Text>Email:</Text>
-      <TextInput
-        style={styles.input}
-        onChangeText={text => onChangeEmail(text)}
-        value={email}
-      />
-      <Text>Password:</Text>
-      <TextInput
-        secureTextEntry={true}
-        style={styles.input}
-        onChangeText={text => onChangePassword(text)}
-        value={password}
-      />
-      <Button
-        onPress={() => loginFn()}
-        title="Login"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
-    </View>
+    <AuthContext.Provider value={authContext}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          {state.userToken == null ? (
+            <Stack.Screen name="Login" component={LoginScreen} />
+          ) : (
+            <Stack.Screen name="Write" component={WriteScreen} />
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </AuthContext.Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  label: {
-    paddingBottom: 20
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingLeft: 10,
-    paddingRight: 10
-  },
-  title: {
-    fontSize: 40,
-    fontWeight: 'bold',
-    marginBottom: 40
-  }
-});
