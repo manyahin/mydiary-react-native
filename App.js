@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -122,7 +123,13 @@ export default function App({ navigation }) {
         },
     }),
     []
-);
+  );
+
+  if (state.isLoading) {
+    // We haven't finished checking for the token yet
+    // return <SplashScreen />;
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <AuthContext.Provider value={authContext}>
