@@ -1,17 +1,28 @@
 import React from 'react';
-import { Text } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
 import WriteScreen from './screens/WriteScreen';
 import LoginScreen from './screens/LoginScreen';
+import SplashScreen from './screens/SplashScreen';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import AuthContext from './AuthContext';
 
-import axios from 'axios';
+import axios from 'axios'
+
+let hostname = `${window.location.hostname}:${window.location.port}`
+let protocol = window.location.protocol;
+if (process.env.NODE_ENV === 'development') {
+  hostname = `${window.location.hostname}:3000`
+  protocol = 'http:';
+}
+
+axios.defaults.baseURL = `${protocol}//${hostname}/api/`
+// axios.defaults.headers.common['Authorization'] = auth.getToken()
+// axios.defaults.headers.post['Content-Type'] = 'application/json'
 
 const Stack = createStackNavigator();
 
@@ -53,11 +64,11 @@ export default function App({ navigation }) {
       let userToken;
 
       try {
-        userToken = await AsyncStorage.getItem('@user_key');
+        userToken = await AsyncStorage.getItem('@user_token');
         console.log('UserToken: ' + userToken)
       } catch (e) {
-        console.error(e);
         // Restoring token failed
+        console.error(e);
       }
 
       // After restoring token, we may need to validate it in production apps
@@ -72,69 +83,35 @@ export default function App({ navigation }) {
 
   const authContext = React.useMemo(
     () => ({
-        signIn: async (email, password) => {
+      signIn: async (userToken) => {
+        await AsyncStorage.setItem('@user_token', userToken);
+        dispatch({ type: 'SIGN_IN', token: userToken });
+      },
+      signOut: async () => {
+        await AsyncStorage.removeItem('@user_token');
+        dispatch({ type: 'SIGN_OUT' });
+      },
+      // signUp: async data => {
+      //   // In a production app, we need to send user data to server and get a token
+      //   // We will also need to handle errors if sign up failed
+      //   // After getting token, we need to persist the token using `AsyncStorage`
+      //   // In the example, we'll use a dummy token
 
-          // console.log('Sign in! ' + data)
-            // In a production app, we need to send some data (usually username, password) to server and get a token
-            // We will also need to handle errors if sign in failed
-            // After getting token, we need to persist the token using `AsyncStorage`
-            // In the example, we'll use a dummy token
-
-            if (email && password) {
-              axios.post('http://localhost:3000/api/Customers/login', {
-                email,
-                password
-              })
-                  .then(async data => {
-                      console.log('You are login')
-
-                      // console.log(data.data.id)
-                      // await AsyncStorage.setItem('@user_key', data.data.id)
-                      // console.log('key stored in storage')
-  
-                      // navigation.navigate('Write')
-  
-                      // signIn({ username, password })
-
-                      dispatch({ type: 'SIGN_IN', token: data.data.id });
-                  })
-                  .catch(error => {
-                      // todo: how to get a error.message value?
-                      // setErrorMessage('Wrong credentials')
-                      // hide message after 1 second
-                      // setTimeout(() => setErrorMessage(false), 2000);
-
-                      console.error(error);
-                  })
-            } else {
-              console.log('fill the credentials')
-            }
-
-            // dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-        },
-        signOut: () => dispatch({ type: 'SIGN_OUT' }),
-        signUp: async data => {
-            // In a production app, we need to send user data to server and get a token
-            // We will also need to handle errors if sign up failed
-            // After getting token, we need to persist the token using `AsyncStorage`
-            // In the example, we'll use a dummy token
-
-            dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-        },
+      //   dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+      // },
     }),
     []
   );
 
   if (state.isLoading) {
     // We haven't finished checking for the token yet
-    // return <SplashScreen />;
-    return <Text>Loading...</Text>;
+    return <SplashScreen />;
   }
 
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator headerMode="none">
           {state.userToken == null ? (
             <Stack.Screen name="Login" component={LoginScreen} />
           ) : (

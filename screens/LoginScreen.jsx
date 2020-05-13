@@ -3,11 +3,15 @@ import { StyleSheet, Button, Text, TextInput, View } from 'react-native';
 
 import AuthContext from '../AuthContext';
 
+import axios from 'axios';
+
 const DisplayErrorMessage = (props) => {
     if (props.errorMessage)
-        return <Text style={{ color: 'red', paddingBottom: 20 }}>
-            {props.errorMessage}
-        </Text>
+        return (
+            <Text style={{ color: 'red', paddingBottom: 20 }}>
+                {props.errorMessage}
+            </Text>
+        );
 
     return null
 }
@@ -15,9 +19,36 @@ const DisplayErrorMessage = (props) => {
 export default function LoginScreen({ navigation }) {
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
-    const [errorMessage, setErrorMessage] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState(null);
 
     const { signIn } = React.useContext(AuthContext);
+
+    const setError = () => {
+        setErrorMessage('Wrong credentials')
+        // hide message after 1 second
+        setTimeout(() => setErrorMessage(null), 2000);
+    }
+
+    const login = (email, password) => {
+        if (email && password) {
+            axios.post('Customers/login', {
+                email,
+                password
+            })
+                .then(async data => {
+                    console.log('You are login!')
+                    const userToken = data.data.id;
+                    signIn(userToken);
+                })
+                .catch(error => {
+                    // todo: how to get a error.message value?
+                    console.error(error);
+                    setError('Credebtials are wrong!')
+                })
+        } else {
+            setError('Fill the credentials!')
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -38,10 +69,9 @@ export default function LoginScreen({ navigation }) {
                 value={password}
             />
             <Button
-                onPress={() => signIn(email, password)}
+                onPress={() => login(email, password)}
                 title="Login"
                 color="#841584"
-                accessibilityLabel="Learn more about this purple button"
             />
         </View>
     );
