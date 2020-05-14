@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 
 import axios from 'axios';
@@ -42,12 +42,14 @@ export default function LoginScreen({ navigation }) {
     }
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
             <Text style={styles.title}>MyDiary</Text>
             <DisplayErrorMessage errorMessage={errorMessage} />
             <Input
                 placeholder='Email'
                 onChangeText={text => onChangeEmail(text)}
+                // returnKeyType="Next"
+                autoCompleteType="email"
                 value={email}
             />
             <Input
@@ -62,7 +64,7 @@ export default function LoginScreen({ navigation }) {
                 style={styles.button}
                 disabled={!(email && password)}
             />
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 

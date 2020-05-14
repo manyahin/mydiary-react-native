@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import { ScrollView, FlatList, StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { FlatList, StyleSheet, View, TextInput } from 'react-native';
+import { Button, Text } from 'react-native-elements';
+import moment from 'moment';
 
 import AuthContext from '../AuthContext';
 
@@ -9,9 +11,9 @@ import axios from 'axios';
 
 function Note({ note }) {
     return (
-        <View style={{marginTop: 5, marginBottom: 5}}>
-            <Text>{note.created_at}</Text>
-            <Text>{note.body}</Text>
+        <View style={{marginBottom: 10}}>
+            <Text style={{color: 'grey'}}>{moment(new Date(note.created_at)).format("dddd, MMM Do YY, HH:mm")}</Text>
+            <Text style={{fontSize: 16, paddingTop: 5}}>{note.body}</Text>
         </View>
     );
 }
@@ -63,12 +65,13 @@ export default function WriteScreen() {
     }
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             <View style={styles.topbar}>
-                <Text>Write Screen</Text>
+                <Text style={styles.logo}>MyDiary</Text>
                 <Button
                     onPress={() => signOut()}
-                    title="logout"
+                    title="Sign Out"
+                    type="clear"
                 />
             </View>
             <View>
@@ -83,14 +86,14 @@ export default function WriteScreen() {
                     title="Write"
                 />
             </View>
-            <View>
-                <FlatList
-                    data={notes}
-                    renderItem={({ item }) => <Note note={item}/>}
-                    keyExtractor={item => item.id}
-                />
-            </View>
-        </ScrollView>
+
+            <FlatList
+                data={notes}
+                renderItem={({ item }) => <Note note={item}/>}
+                keyExtractor={item => item.id}
+                style={{marginTop: 20}}
+            />
+        </View>
     );
 }
 
@@ -101,15 +104,23 @@ const styles = StyleSheet.create({
         padding: 10
     },
     topbar: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        maxHeight: 30,
-        marginBottom: 10
+        marginTop: 20,
+        marginBottom: 10  
+    },
+    logo: {
+        fontSize: 17, 
+        fontStyle: 'italic', 
+        fontWeight: 'bold', 
+        paddingTop: 13, 
+        paddingLeft: 2, 
+        color: 'black'
     },
     textarea: {
         borderWidth: 1,
         marginBottom: 5,
-        padding: 5
+        padding: 5,
+        height: 100 
     }
 });
