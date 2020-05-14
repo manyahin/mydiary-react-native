@@ -1,18 +1,16 @@
 import React from 'react';
 import { AsyncStorage } from 'react-native';
+import axios from 'axios';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import WriteScreen from './screens/WriteScreen';
 import LoginScreen from './screens/LoginScreen';
 import SplashScreen from './screens/SplashScreen';
-
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
 import AuthContext from './AuthContext';
+import config from './config';
 
-import axios from 'axios'
-
-axios.defaults.baseURL = `https://d.stage.manyahin.ru/api/`
+axios.defaults.baseURL = config.db.uri;
 // axios.defaults.headers.common['Authorization'] = auth.getToken()
 // axios.defaults.headers.post['Content-Type'] = 'application/json'
 
