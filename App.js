@@ -1,5 +1,6 @@
 import React from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Platform } from 'react-native';
+
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -7,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import WriteScreen from './screens/WriteScreen';
 import LoginScreen from './screens/LoginScreen';
 import SplashScreen from './screens/SplashScreen';
+
 import AuthContext from './AuthContext';
 import config from './config';
 
@@ -51,6 +53,7 @@ export default function App({ navigation }) {
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
+
       let userToken;
 
       try {

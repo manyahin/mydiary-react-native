@@ -49,7 +49,7 @@ export default function LoginScreen({ navigation }) {
                 placeholder='Email'
                 onChangeText={text => onChangeEmail(text)}
                 // returnKeyType="Next"
-                autoCompleteType="email"
+                // autoCompleteType="email" // web bug
                 value={email}
             />
             <Input
