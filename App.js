@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import { AsyncStorage } from 'react-native';
 
 import WriteScreen from './screens/WriteScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -11,16 +11,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import AuthContext from './AuthContext';
 
-import axios from 'axios'
+import axios from 'axios';
+import config from './config';
 
-let hostname = `${window.location.hostname}:${window.location.port}`
-let protocol = window.location.protocol;
-if (process.env.NODE_ENV === 'development') {
-  hostname = `${window.location.hostname}:3000`
-  protocol = 'http:';
-}
-
-axios.defaults.baseURL = `${protocol}//${hostname}/api/`
+axios.defaults.baseURL = config.db.uri;
 // axios.defaults.headers.common['Authorization'] = auth.getToken()
 // axios.defaults.headers.post['Content-Type'] = 'application/json'
 
