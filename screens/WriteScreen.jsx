@@ -3,7 +3,7 @@ import { ScrollView, FlatList, StyleSheet, Text, View, TextInput, Button } from 
 
 import AuthContext from '../AuthContext';
 
-import AsyncStorage from '@react-native-community/async-storage';
+import { AsyncStorage } from 'react-native';
 
 import axios from 'axios';
 

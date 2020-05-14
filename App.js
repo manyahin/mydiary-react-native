@@ -1,6 +1,5 @@
 import React from 'react';
-
-import AsyncStorage from '@react-native-community/async-storage';
+import { AsyncStorage } from 'react-native';
 
 import WriteScreen from './screens/WriteScreen';
 import LoginScreen from './screens/LoginScreen';
@@ -13,14 +12,7 @@ import AuthContext from './AuthContext';
 
 import axios from 'axios'
 
-let hostname = `${window.location.hostname}:${window.location.port}`
-let protocol = window.location.protocol;
-if (process.env.NODE_ENV === 'development') {
-  hostname = `${window.location.hostname}:3000`
-  protocol = 'http:';
-}
-
-axios.defaults.baseURL = `${protocol}//${hostname}/api/`
+axios.defaults.baseURL = `https://d.stage.manyahin.ru/api/`
 // axios.defaults.headers.common['Authorization'] = auth.getToken()
 // axios.defaults.headers.post['Content-Type'] = 'application/json'
 
