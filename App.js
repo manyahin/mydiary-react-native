@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import WriteScreen from './screens/WriteScreen';
 import LoginScreen from './screens/LoginScreen';
+import ReadScreen from './screens/ReadScreen';
 import SplashScreen from './screens/SplashScreen';
 
 import AuthContext from './AuthContext';
@@ -108,7 +109,10 @@ export default function App({ navigation }) {
           {state.userToken == null ? (
             <Stack.Screen name="Login" component={LoginScreen} />
           ) : (
-            <Stack.Screen name="Write" component={WriteScreen} />
+            <>
+              <Stack.Screen name="Write" component={WriteScreen} />
+              <Stack.Screen name="Read" component={ReadScreen} />
+            </>
           )}
         </Stack.Navigator>
       </NavigationContainer>

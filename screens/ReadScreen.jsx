@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 
 import AuthContext from '../AuthContext';
@@ -8,26 +8,18 @@ import NotesList from '../components/NotesList';
 
 import NoteModel from '../models/note';
 
-export default function WriteScreen({ navigation }) {
-
-    const [message, setMessage] = React.useState('');
+export default function ReadScreen({navigation}) {
     const [notes, setNotes] = React.useState([]);
 
     const { signOut } = React.useContext(AuthContext);
 
     useEffect(() => {
         const boot = async () => {
-            setNotes(await NoteModel.getNotes('desc', 10));
+            setNotes(await NoteModel.getNotes());
         }
 
         boot();
     }, []);
-
-    const writeMessage = async () => {
-        await NoteModel.addNote(message);
-        setMessage('');
-        setNotes(await NoteModel.getNotes('desc', 10));
-    }
 
     return (
         <View style={styles.container}>
@@ -39,25 +31,16 @@ export default function WriteScreen({ navigation }) {
                     type="clear"
                 />
                 <Button
-                    onPress={() => navigation.navigate('Read')}
-                    title="Read"
+                    onPress={() => navigation.navigate('Write')}
+                    title="Write"
                     type="clear"/>
             </View>
             <View>
-                <TextInput style={styles.textarea}
-                    multiline={true}
-                    numberOfLines={4}
-                    value={message}
-                    onChangeText={text => setMessage(text)}
-                />
-                <Button
-                    onPress={() => writeMessage()}
-                    title="Write"
-                />
+                <Text h4>Read Screen</Text>
+                <NotesList notes={notes}></NotesList>
             </View>
-            <NotesList notes={notes} />
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -79,11 +62,6 @@ const styles = StyleSheet.create({
         paddingTop: 13, 
         paddingLeft: 2, 
         color: 'black'
-    },
-    textarea: {
-        borderWidth: 1,
-        marginBottom: 5,
-        padding: 5,
-        height: 100 
     }
 });
+
