@@ -28,11 +28,9 @@ export default {
         const userToken = await AsyncStorage.getItem('@user_token');
 
         try {
-            const data = axios.post('Notes', note, {
+            const data = await axios.post('Notes', note, {
                 headers: { 'Authorization': userToken }
             })
-
-            console.log(data);
 
             return data.data;
         }

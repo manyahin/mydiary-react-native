@@ -55,6 +55,10 @@ export default function WriteScreen({ navigation }) {
                     title="Write"
                 />
             </View>
+            {/* todo: why NotesList get render again when i type into TextInput? 
+                and when I move from read to write then the write component the same,
+                but when I move from write to read the read component reload
+            */}
             <NotesList notes={notes} />
         </View>
     );
