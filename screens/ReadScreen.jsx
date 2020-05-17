@@ -1,16 +1,13 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Text } from 'react-native-elements';
 import Constants from 'expo-constants';
 
-import AuthContext from '../AuthContext';
 import NotesList from '../components/NotesList';
+import TopBar from '../components/TopBar';
 import NoteModel from '../models/note';
 
 export default function ReadScreen({ navigation }) {
     const [notes, setNotes] = React.useState([]);
-
-    const { signOut } = React.useContext(AuthContext);
 
     useEffect(() => {
         const boot = async () => {
@@ -22,18 +19,7 @@ export default function ReadScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.topbar}>
-                <Text style={styles.logo}>MyDiary</Text>
-                <Button
-                    onPress={() => signOut()}
-                    title="Sign Out"
-                    type="clear"
-                />
-                <Button
-                    onPress={() => navigation.navigate('Write')}
-                    title="Write"
-                    type="clear"/>
-            </View>
+            <TopBar/>
             <View>
                 {/* <Text h4>Read Screen</Text> */}
                 <NotesList notes={notes}></NotesList>
@@ -48,21 +34,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         marginTop: Constants.statusBarHeight,
         padding: 10
-    },
-    topbar: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 10,
-        marginBottom: 10  
-    },
-    logo: {
-        fontSize: 20, 
-        fontStyle: 'italic', 
-        fontWeight: 'bold', 
-        paddingTop: 13, 
-        paddingLeft: 2, 
-        color: 'black',
-        fontFamily: 'CaveatRegular'
     }
 });
 

@@ -28,7 +28,7 @@ function DayNotes({ day, notes }) {
 }
 
 export default function NotesList({ notes }) {
-    // todo: should I use useMemo ?
+    // todo: should I use useMemo here?
     const groupedNotesByDay = (() => {
         console.log('count')
         return notes.reduce((acc, note) => {

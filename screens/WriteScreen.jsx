@@ -2,18 +2,14 @@ import React, { useEffect } from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 
-import AuthContext from '../AuthContext';
-
 import NotesList from '../components/NotesList';
-
+import TopBar from '../components/TopBar';
 import NoteModel from '../models/note';
 
 export default function WriteScreen({ navigation }) {
 
     const [message, setMessage] = React.useState('');
     const [notes, setNotes] = React.useState([]);
-
-    const { signOut } = React.useContext(AuthContext);
 
     useEffect(() => {
         const boot = async () => {
@@ -31,18 +27,7 @@ export default function WriteScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.topbar}>
-                <Text style={styles.logo}>MyDiary</Text>
-                <Button
-                    onPress={() => signOut()}
-                    title="Sign Out"
-                    type="clear"
-                />
-                <Button
-                    onPress={() => navigation.navigate('Read')}
-                    title="Read"
-                    type="clear"/>
-            </View>
+            <TopBar />
             <View>
                 <TextInput style={styles.textarea}
                     multiline={true}
@@ -69,21 +54,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         padding: 10
-    },
-    topbar: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginTop: 10,
-        marginBottom: 10 
-    },
-    logo: {
-        fontSize: 20, 
-        fontStyle: 'italic', 
-        fontWeight: 'bold', 
-        paddingTop: 13, 
-        paddingLeft: 2, 
-        color: 'black',
-        fontFamily: 'CaveatRegular'
     },
     textarea: {
         borderWidth: 1,

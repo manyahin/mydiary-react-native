@@ -10,6 +10,7 @@ import WriteScreen from './screens/WriteScreen';
 import LoginScreen from './screens/LoginScreen';
 import ReadScreen from './screens/ReadScreen';
 import SplashScreen from './screens/SplashScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
 import AuthContext from './AuthContext';
 import config from './config';
@@ -70,7 +71,7 @@ export default function App({ navigation }) {
         }
       }
 
-      loadFonts();
+      await loadFonts();
 
       let userToken;
 
@@ -129,6 +130,7 @@ export default function App({ navigation }) {
             <>
               <Stack.Screen name="Write" component={WriteScreen} />
               <Stack.Screen name="Read" component={ReadScreen} />
+              <Stack.Screen name="Settings" component={SettingsScreen} />
             </>
           )}
         </Stack.Navigator>
