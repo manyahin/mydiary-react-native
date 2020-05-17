@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     topbar: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 20,
+        marginTop: 10,
         marginBottom: 10  
     },
     logo: {
