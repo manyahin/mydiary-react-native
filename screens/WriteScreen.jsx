@@ -73,12 +73,13 @@ const styles = StyleSheet.create({
         marginBottom: 10 
     },
     logo: {
-        fontSize: 17, 
+        fontSize: 20, 
         fontStyle: 'italic', 
         fontWeight: 'bold', 
         paddingTop: 13, 
         paddingLeft: 2, 
-        color: 'black'
+        color: 'black',
+        fontFamily: 'CaveatRegular'
     },
     textarea: {
         borderWidth: 1,

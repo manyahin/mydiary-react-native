@@ -1,5 +1,6 @@
 import React from 'react';
 import { AsyncStorage, Platform } from 'react-native';
+import * as Font from 'expo-font';
 
 import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
@@ -54,6 +55,22 @@ export default function App({ navigation }) {
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
+
+      const loadFonts = async () => {
+        try {
+          await Font.loadAsync({
+              CaveatRegular: require('./assets/fonts/Caveat-Regular.ttf'),
+              CaveatBold: {
+                  uri: require('./assets/fonts/Caveat-Bold.ttf'),
+                  fontDisplay: Font.FontDisplay.BLOCK
+              }
+          });
+        } catch (err) {
+            console.error('Error loading the font: ' + err);
+        }
+      }
+
+      loadFonts();
 
       let userToken;
 

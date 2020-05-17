@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
-
 import axios from 'axios';
 
 import AuthContext from '../AuthContext';
@@ -77,9 +76,10 @@ const styles = StyleSheet.create({
         padding: 50
     },
     title: {
-        fontSize: 40,
+        fontSize: 60,
         fontWeight: 'bold',
-        marginBottom: 45
+        marginBottom: 45,
+        fontFamily: 'CaveatRegular'
     },
     button: {
         marginTop: 30,
