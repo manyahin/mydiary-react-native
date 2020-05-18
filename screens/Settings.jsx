@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Button, Divider } from 'react-native-elements';
 import Constants from 'expo-constants';
 import { CheckBox } from 'react-native-elements'
 
 import TopBar from '../components/TopBar';
+import { ConfigContext } from '../stores/config';
 
-import ConfigContext from '../contexts/ConfigContext';
-
-export default function SettingsScreen({ navigation }) {
+export default function SettingsScreen() {
 
     const { config, updateConfig } = React.useContext(ConfigContext);
 
@@ -20,6 +18,11 @@ export default function SettingsScreen({ navigation }) {
                     title='Display last notes on Home screen'
                     checked={config.displayLastNotes}
                     onPress={() => updateConfig({displayLastNotes: !config.displayLastNotes})}
+                />
+                <CheckBox
+                    title='Offline mode'
+                    checked={config.offlineMode}
+                    onPress={() => updateConfig({offlineMode: !config.offlineMode})}
                 />
             </View>
         </View>
@@ -34,4 +37,3 @@ const styles = StyleSheet.create({
         padding: 10
     }
 });
-

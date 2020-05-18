@@ -6,7 +6,7 @@ import NotesList from '../components/NotesList';
 import TopBar from '../components/TopBar';
 import NoteModel from '../models/note';
 
-import ConfigContext from '../contexts/ConfigContext';
+import { ConfigContext } from '../stores/config';
 
 export default function WriteScreen({ navigation }) {
 

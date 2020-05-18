@@ -4,7 +4,7 @@ import { Text, Button, Divider } from 'react-native-elements';
 import Constants from 'expo-constants';
 
 import TopBar from '../components/TopBar';
-import AuthContext from '../contexts/AuthContext';
+import { AuthContext } from '../stores/auth';
 
 export default function MenuScreen({ navigation }) {
 
