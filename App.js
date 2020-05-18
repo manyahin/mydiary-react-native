@@ -1,20 +1,25 @@
 import React from 'react';
+import { AsyncStorage, Platform } from 'react-native';
+import * as Font from 'expo-font';
 
-import { AsyncStorage } from 'react-native';
-
-import WriteScreen from './screens/WriteScreen';
-import LoginScreen from './screens/LoginScreen';
-import SplashScreen from './screens/SplashScreen';
-
+import axios from 'axios';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import AuthContext from './AuthContext';
+import WriteScreen from './screens/WriteScreen';
+import LoginScreen from './screens/LoginScreen';
+import ReadScreen from './screens/ReadScreen';
+import SplashScreen from './screens/SplashScreen';
+import MenuScreen from './screens/MenuScreen';
+import CalendarScreen from './screens/CalendarScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
-import axios from 'axios';
-import config from './config';
+import AuthContext from './contexts/AuthContext';
+import ConfigContext from './contexts/ConfigContext';
 
-axios.defaults.baseURL = config.db.uri;
+import ConfigFile from './config';
+
+axios.defaults.baseURL = ConfigFile.db.uri;
 // axios.defaults.headers.common['Authorization'] = auth.getToken()
 // axios.defaults.headers.post['Content-Type'] = 'application/json'
 
@@ -55,6 +60,23 @@ export default function App({ navigation }) {
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
+
+      const loadFonts = async () => {
+        try {
+          await Font.loadAsync({
+              CaveatRegular: require('./assets/fonts/Caveat-Regular.ttf'),
+              CaveatBold: {
+                  uri: require('./assets/fonts/Caveat-Bold.ttf'),
+                  fontDisplay: Font.FontDisplay.BLOCK
+              }
+          });
+        } catch (err) {
+            console.error('Error loading the font: ' + err);
+        }
+      }
+
+      await loadFonts();
+
       let userToken;
 
       try {
@@ -97,6 +119,15 @@ export default function App({ navigation }) {
     []
   );
 
+  // Config
+  const [config, setConfig] = React.useState(ConfigFile);
+  const configContext = {
+    config,
+    updateConfig: (obj) => {
+      setConfig({...config, ...obj});
+    }
+  };
+
   if (state.isLoading) {
     // We haven't finished checking for the token yet
     return <SplashScreen />;
@@ -104,15 +135,23 @@ export default function App({ navigation }) {
 
   return (
     <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        <Stack.Navigator headerMode="none">
-          {state.userToken == null ? (
-            <Stack.Screen name="Login" component={LoginScreen} />
-          ) : (
-            <Stack.Screen name="Write" component={WriteScreen} />
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ConfigContext.Provider value={configContext}>
+        <NavigationContainer>
+          <Stack.Navigator headerMode="none">
+            {state.userToken == null ? (
+              <Stack.Screen name="Login" component={LoginScreen} />
+            ) : (
+              <>
+                <Stack.Screen name="Write" component={WriteScreen} />
+                <Stack.Screen name="Read" component={ReadScreen} />
+                <Stack.Screen name="Menu" component={MenuScreen} />
+                <Stack.Screen name="Calendar" component={CalendarScreen} />
+                <Stack.Screen name="Settings" component={SettingsScreen} />
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ConfigContext.Provider>
     </AuthContext.Provider>
   );
 }

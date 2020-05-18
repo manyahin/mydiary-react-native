@@ -1,14 +1,14 @@
-import React from 'react';
-import { StyleSheet, Button, Text, TextInput, View } from 'react-native';
-
-import AuthContext from '../AuthContext';
-
+import React, { useEffect } from 'react';
+import { StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { Button, Input, Text } from 'react-native-elements';
 import axios from 'axios';
+
+import AuthContext from '../contexts/AuthContext';
 
 const DisplayErrorMessage = (props) => {
     if (props.errorMessage)
         return (
-            <Text style={{ color: 'red', paddingBottom: 20 }}>
+            <Text style={styles.errorMessage}>
                 {props.errorMessage}
             </Text>
         );
@@ -23,57 +23,47 @@ export default function LoginScreen({ navigation }) {
 
     const { signIn } = React.useContext(AuthContext);
 
-    const setError = () => {
-        setErrorMessage('Wrong credentials')
+    const setError = (message) => {
+        setErrorMessage(message);
         // hide message after 1 second
         setTimeout(() => setErrorMessage(null), 2000);
     }
 
     const login = (email, password) => {
-        if (email && password) {
-            axios.post('Customers/login', {
-                email,
-                password
+        axios.post('Customers/login', {
+            email,
+            password
+        })
+            .then(data => signIn(data.data.id))
+            .catch(error => {
+                setError('Credentials are wrong!')
             })
-                .then(async data => {
-                    console.log('You are login!')
-                    const userToken = data.data.id;
-                    signIn(userToken);
-                })
-                .catch(error => {
-                    // todo: how to get a error.message value?
-                    console.error(error);
-                    setError('Credebtials are wrong!')
-                })
-        } else {
-            setError('Fill the credentials!')
-        }
     }
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
             <Text style={styles.title}>MyDiary</Text>
-            <Text style={styles.label}>Enter your credentials</Text>
             <DisplayErrorMessage errorMessage={errorMessage} />
-            <Text>Email:</Text>
-            <TextInput
-                style={styles.input}
+            <Input
+                placeholder='Email'
                 onChangeText={text => onChangeEmail(text)}
+                // returnKeyType="Next"
+                // autoCompleteType="email" // web bug
                 value={email}
             />
-            <Text>Password:</Text>
-            <TextInput
+            <Input
+                placeholder='Password'
                 secureTextEntry={true}
-                style={styles.input}
                 onChangeText={text => onChangePassword(text)}
                 value={password}
             />
             <Button
                 onPress={() => login(email, password)}
-                title="Login"
-                color="#841584"
+                title="Sign In"
+                style={styles.button}
+                disabled={!(email && password)}
             />
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -83,21 +73,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    label: {
-        paddingBottom: 20
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 20,
-        paddingLeft: 10,
-        paddingRight: 10
+        padding: 50
     },
     title: {
-        fontSize: 40,
+        fontSize: 60,
         fontWeight: 'bold',
-        marginBottom: 40
+        marginBottom: 45,
+        fontFamily: 'CaveatRegular'
+    },
+    button: {
+        marginTop: 30,
+        width: 100
+    },
+    errorMessage: {
+        color: 'red',
+        fontWeight: 'bold',
+        paddingBottom: 20,
+        fontSize: 16
     }
 });

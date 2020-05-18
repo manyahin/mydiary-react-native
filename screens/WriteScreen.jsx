@@ -1,76 +1,37 @@
 import React, { useEffect } from 'react';
-import { ScrollView, FlatList, StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
+import { Button, Text } from 'react-native-elements';
 
-import AuthContext from '../AuthContext';
+import NotesList from '../components/NotesList';
+import TopBar from '../components/TopBar';
+import NoteModel from '../models/note';
 
-import { AsyncStorage } from 'react-native';
+import ConfigContext from '../contexts/ConfigContext';
 
-import axios from 'axios';
-
-function Note({ note }) {
-    return (
-        <View style={{marginTop: 5, marginBottom: 5}}>
-            <Text>{note.created_at}</Text>
-            <Text>{note.body}</Text>
-        </View>
-    );
-}
-
-export default function WriteScreen() {
+export default function WriteScreen({ navigation }) {
 
     const [message, setMessage] = React.useState('');
     const [notes, setNotes] = React.useState([]);
 
-    const { signOut } = React.useContext(AuthContext);
+    const { config } = React.useContext(ConfigContext);
 
     useEffect(() => {
-        getLastNotes();
+        const boot = async () => {
+            setNotes(await NoteModel.getNotes('desc', 10));
+        }
+
+        boot();
     }, []);
 
     const writeMessage = async () => {
-        const note = {}
-        note.created_at = new Date()
-        note.body = message
-
-        const userToken = await AsyncStorage.getItem('@user_token');
-
-        axios.post('Notes', note, {
-            headers: { 'Authorization': userToken }
-        })
-            .then(async data => {
-                console.log('You wrote a note!')
-                setMessage('');
-                getLastNotes();
-            })
-            .catch(error => {
-                console.error(error);
-            })
-    }
-
-    const getLastNotes = async () => {
-        const userToken = await AsyncStorage.getItem('@user_token');
-
-        axios.get(`Notes?filter=${JSON.stringify({ order: `created_at desc`, limit: 10 })}`, {
-            headers: { 'Authorization': userToken }
-        })
-            .then(data => {
-                console.log(data);
-                setNotes(data.data);
-            })
-            .catch(error => {
-                console.error(error);
-            })
+        await NoteModel.addNote(message);
+        setMessage('');
+        setNotes(await NoteModel.getNotes('desc', 10));
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <View style={styles.topbar}>
-                <Text>Write Screen</Text>
-                <Button
-                    onPress={() => signOut()}
-                    title="logout"
-                />
-            </View>
+        <View style={styles.container}>
+            <TopBar />
             <View>
                 <TextInput style={styles.textarea}
                     multiline={true}
@@ -83,14 +44,12 @@ export default function WriteScreen() {
                     title="Write"
                 />
             </View>
-            <View>
-                <FlatList
-                    data={notes}
-                    renderItem={({ item }) => <Note note={item}/>}
-                    keyExtractor={item => item.id}
-                />
-            </View>
-        </ScrollView>
+            {/* todo: why NotesList get render again when i type into TextInput? 
+                and when I move from read to write then the write component the same,
+                but when I move from write to read the read component reload
+            */}
+            {config.displayLastNotes && <NotesList notes={notes} />}
+        </View>
     );
 }
 
@@ -100,16 +59,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 10
     },
-    topbar: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        maxHeight: 30,
-        marginBottom: 10
-    },
     textarea: {
         borderWidth: 1,
         marginBottom: 5,
-        padding: 5
+        padding: 5,
+        height: 100 
     }
 });

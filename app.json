@@ -2,6 +2,7 @@
   "expo": {
     "name": "mydiary",
     "slug": "mydiary",
+    "privacy": "unlisted",
     "platforms": [
       "ios",
       "android",
@@ -12,7 +13,7 @@
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
