@@ -1,5 +1,9 @@
 {
+  "name": "mydiary",
+  "version": "1.0.0",
+  "author": "Ilya Manyahin <i.manyahin@gmail.com>",
   "main": "node_modules/expo/AppEntry.js",
+  "private": true,
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -31,6 +35,5 @@
     "@babel/core": "^7.8.6",
     "babel-preset-expo": "~8.1.0",
     "cross-env": "^7.0.2"
-  },
-  "private": true
+  }
 }

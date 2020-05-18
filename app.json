@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "mydiary",
+    "name": "MyDiary",
     "slug": "mydiary",
+    "version": "1.0.0",
     "privacy": "unlisted",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
