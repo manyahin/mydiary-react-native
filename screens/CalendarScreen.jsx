@@ -2,25 +2,16 @@ import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Button, Divider } from 'react-native-elements';
 import Constants from 'expo-constants';
-import { CheckBox } from 'react-native-elements'
 
 import TopBar from '../components/TopBar';
 
-import ConfigContext from '../contexts/ConfigContext';
-
-export default function SettingsScreen({ navigation }) {
-
-    const { config, updateConfig } = React.useContext(ConfigContext);
+export default function CalendarScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
             <TopBar/>
             <View>
-                <CheckBox
-                    title='Display last notes on Home screen'
-                    checked={config.displayLastNotes}
-                    onPress={() => updateConfig({displayLastNotes: !config.displayLastNotes})}
-                />
+                <Text>In developming...</Text>
             </View>
         </View>
     )

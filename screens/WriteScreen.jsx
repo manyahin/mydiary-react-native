@@ -6,10 +6,14 @@ import NotesList from '../components/NotesList';
 import TopBar from '../components/TopBar';
 import NoteModel from '../models/note';
 
+import ConfigContext from '../contexts/ConfigContext';
+
 export default function WriteScreen({ navigation }) {
 
     const [message, setMessage] = React.useState('');
     const [notes, setNotes] = React.useState([]);
+
+    const { config } = React.useContext(ConfigContext);
 
     useEffect(() => {
         const boot = async () => {
@@ -44,7 +48,7 @@ export default function WriteScreen({ navigation }) {
                 and when I move from read to write then the write component the same,
                 but when I move from write to read the read component reload
             */}
-            <NotesList notes={notes} />
+            {config.displayLastNotes && <NotesList notes={notes} />}
         </View>
     );
 }

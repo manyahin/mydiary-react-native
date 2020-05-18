@@ -3,7 +3,7 @@ import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import axios from 'axios';
 
-import AuthContext from '../AuthContext';
+import AuthContext from '../contexts/AuthContext';
 
 const DisplayErrorMessage = (props) => {
     if (props.errorMessage)

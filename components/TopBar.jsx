@@ -17,10 +17,10 @@ export default function TopBar() {
                 onPress={() => navigation.navigate('Write')}
                 >MyDiary</Text>
             {/* <Icon 
-                onPress={() => navigation.navigate('Settings')}
+                onPress={() => navigation.navigate('Menu')}
                 name="menu"
                 size={32} /> */}
-            <Text style={styles.menu} onPress={() => navigation.navigate('Settings')}>Menu</Text>
+            <Text style={styles.menu} onPress={() => navigation.navigate('Menu')}>Menu</Text>
         </View>
     )
 }

@@ -10,12 +10,16 @@ import WriteScreen from './screens/WriteScreen';
 import LoginScreen from './screens/LoginScreen';
 import ReadScreen from './screens/ReadScreen';
 import SplashScreen from './screens/SplashScreen';
+import MenuScreen from './screens/MenuScreen';
+import CalendarScreen from './screens/CalendarScreen';
 import SettingsScreen from './screens/SettingsScreen';
 
-import AuthContext from './AuthContext';
-import config from './config';
+import AuthContext from './contexts/AuthContext';
+import ConfigContext from './contexts/ConfigContext';
 
-axios.defaults.baseURL = config.db.uri;
+import ConfigFile from './config';
+
+axios.defaults.baseURL = ConfigFile.db.uri;
 // axios.defaults.headers.common['Authorization'] = auth.getToken()
 // axios.defaults.headers.post['Content-Type'] = 'application/json'
 
@@ -115,6 +119,15 @@ export default function App({ navigation }) {
     []
   );
 
+  // Config
+  const [config, setConfig] = React.useState(ConfigFile);
+  const configContext = {
+    config,
+    updateConfig: (obj) => {
+      setConfig({...config, ...obj});
+    }
+  };
+
   if (state.isLoading) {
     // We haven't finished checking for the token yet
     return <SplashScreen />;
@@ -122,19 +135,23 @@ export default function App({ navigation }) {
 
   return (
     <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        <Stack.Navigator headerMode="none">
-          {state.userToken == null ? (
-            <Stack.Screen name="Login" component={LoginScreen} />
-          ) : (
-            <>
-              <Stack.Screen name="Write" component={WriteScreen} />
-              <Stack.Screen name="Read" component={ReadScreen} />
-              <Stack.Screen name="Settings" component={SettingsScreen} />
-            </>
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
+      <ConfigContext.Provider value={configContext}>
+        <NavigationContainer>
+          <Stack.Navigator headerMode="none">
+            {state.userToken == null ? (
+              <Stack.Screen name="Login" component={LoginScreen} />
+            ) : (
+              <>
+                <Stack.Screen name="Write" component={WriteScreen} />
+                <Stack.Screen name="Read" component={ReadScreen} />
+                <Stack.Screen name="Menu" component={MenuScreen} />
+                <Stack.Screen name="Calendar" component={CalendarScreen} />
+                <Stack.Screen name="Settings" component={SettingsScreen} />
+              </>
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ConfigContext.Provider>
     </AuthContext.Provider>
   );
 }
