@@ -5,8 +5,6 @@ import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from 'react-native-elements'
 
-console.log(Constants.statusBarHeight);
-
 export default function TopBar() {
     
     const navigation = useNavigation();

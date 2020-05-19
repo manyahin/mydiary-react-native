@@ -13,11 +13,13 @@ import CalendarScreen from './Calendar';
 import SettingsScreen from './Settings';
 
 import { AuthContext } from '../stores/auth';
+import { ConfigContext } from '../stores/config';
 
 const RootStack = createStackNavigator();
 
-function renderScreen(userToken) {
-  if (!userToken) {
+function renderScreen(offlineMode, userToken) {
+  
+  if (!offlineMode && !userToken) {
     return (
       <RootStack.Navigator headerMode="none">
         <RootStack.Screen name="Login" component={LoginScreen} />
@@ -47,10 +49,11 @@ const styles = StyleSheet.create({
 
 export default function Screens() {
   const { state } = React.useContext(AuthContext);
+  const { config } = React.useContext(ConfigContext);
 
   return (
     <View style={styles.container}>
-      <NavigationContainer>{renderScreen(state.userToken)}</NavigationContainer>
+      <NavigationContainer>{renderScreen(config.offlineMode, state.userToken)}</NavigationContainer>
     </View>
   );
 };

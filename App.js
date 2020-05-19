@@ -2,12 +2,13 @@ import React from 'react';
 import * as Font from 'expo-font';
 import axios from 'axios';
 
+import Screens from './screens/Screens'
 import SplashScreen from './screens/Splash';
 import { AuthContextProvider } from './stores/auth';
 import { ConfigContextProvider } from './stores/config';
+import { DbContextProvider } from './stores/db';
 
 import ConfigFile from './config';
-import Screens from './screens/Screens'
 
 axios.defaults.baseURL = ConfigFile.db.uri;
 // axios.defaults.headers.common['Authorization'] = auth.getToken()
@@ -31,7 +32,7 @@ export default function App() {
               }
           });
         } catch (err) {
-            console.error('Error loading the font: ' + err);
+            console.error('Error loading fonts: ' + err);
         }
       }
 
@@ -45,11 +46,13 @@ export default function App() {
   return (
     <AuthContextProvider>
       <ConfigContextProvider>
-        {ready ? (
-          <Screens />
-        ) : (
-          <SplashScreen />
-        )}
+        <DbContextProvider>
+          {ready ? (
+            <Screens />
+          ) : (
+            <SplashScreen />
+          )}
+        </DbContextProvider>
       </ConfigContextProvider>
     </AuthContextProvider>
   );

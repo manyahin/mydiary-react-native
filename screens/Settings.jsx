@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import Constants from 'expo-constants';
 import { CheckBox } from 'react-native-elements'
 
@@ -21,9 +21,12 @@ export default function SettingsScreen() {
                 />
                 <CheckBox
                     title='Offline mode'
+                    disabled={true}
+                    style={styles.disableCheckBox}
                     checked={config.offlineMode}
                     onPress={() => updateConfig({offlineMode: !config.offlineMode})}
                 />
+                <Text>This option is disabled due the next version that will support synchronization</Text>
             </View>
         </View>
     )
