@@ -3,23 +3,13 @@ import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import axios from 'axios';
 
-import AuthContext from '../contexts/AuthContext';
-
-const DisplayErrorMessage = (props) => {
-    if (props.errorMessage)
-        return (
-            <Text style={styles.errorMessage}>
-                {props.errorMessage}
-            </Text>
-        );
-
-    return null
-}
+import { AuthContext } from '../stores/auth';
+import { DisplayMessage } from '../components/DisplayMessage';
 
 export default function LoginScreen({ navigation }) {
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
-    const [errorMessage, setErrorMessage] = React.useState(null);
+    const [notificationOptions, setNotification] = React.useState(null);
 
     const { signIn } = React.useContext(AuthContext);
 
@@ -29,6 +19,19 @@ export default function LoginScreen({ navigation }) {
         setTimeout(() => setErrorMessage(null), 2000);
     }
 
+    const setErrorNotification = (message) => {
+        setNotification(prevState => {
+            return {
+                ...prevState,
+                message,
+                type: 'error'
+            }
+        });
+
+        // hide a message after 1 second
+        setTimeout(() => setNotification(null), 2000);
+    }
+
     const login = (email, password) => {
         axios.post('Customers/login', {
             email,
@@ -36,14 +39,16 @@ export default function LoginScreen({ navigation }) {
         })
             .then(data => signIn(data.data.id))
             .catch(error => {
-                setError('Credentials are wrong!')
+                setErrorNotification('Credentials are wrong!')
             })
     }
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             <Text style={styles.title}>MyDiary</Text>
-            <DisplayErrorMessage errorMessage={errorMessage} />
+            <DisplayMessage 
+                options={notificationOptions}
+            />  
             <Input
                 placeholder='Email'
                 onChangeText={text => onChangeEmail(text)}
@@ -84,11 +89,5 @@ const styles = StyleSheet.create({
     button: {
         marginTop: 30,
         width: 100
-    },
-    errorMessage: {
-        color: 'red',
-        fontWeight: 'bold',
-        paddingBottom: 20,
-        fontSize: 16
     }
 });

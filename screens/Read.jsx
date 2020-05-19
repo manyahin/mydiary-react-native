@@ -4,14 +4,16 @@ import Constants from 'expo-constants';
 
 import NotesList from '../components/NotesList';
 import TopBar from '../components/TopBar';
-import NoteModel from '../models/note';
+import { DbContext } from '../stores/db';
 
 export default function ReadScreen({ navigation }) {
+
     const [notes, setNotes] = React.useState([]);
+    const Db = React.useContext(DbContext);
 
     useEffect(() => {
         const boot = async () => {
-            setNotes(await NoteModel.getNotes());
+            setNotes(await Db.getNotes());
         }
 
         boot();

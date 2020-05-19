@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Text, Button, Divider } from 'react-native-elements';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import Constants from 'expo-constants';
 import { CheckBox } from 'react-native-elements'
 
 import TopBar from '../components/TopBar';
+import { ConfigContext } from '../stores/config';
 
-import ConfigContext from '../contexts/ConfigContext';
-
-export default function SettingsScreen({ navigation }) {
+export default function SettingsScreen() {
 
     const { config, updateConfig } = React.useContext(ConfigContext);
 
@@ -21,6 +19,14 @@ export default function SettingsScreen({ navigation }) {
                     checked={config.displayLastNotes}
                     onPress={() => updateConfig({displayLastNotes: !config.displayLastNotes})}
                 />
+                <CheckBox
+                    title='Offline mode'
+                    disabled={true}
+                    style={styles.disableCheckBox}
+                    checked={config.offlineMode}
+                    onPress={() => updateConfig({offlineMode: !config.offlineMode})}
+                />
+                <Text>This option is disabled due the next version that will support synchronization</Text>
             </View>
         </View>
     )
@@ -34,4 +40,3 @@ const styles = StyleSheet.create({
         padding: 10
     }
 });
-

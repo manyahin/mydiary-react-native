@@ -30,7 +30,8 @@ function DayNotes({ day, notes }) {
 export default function NotesList({ notes }) {
     // todo: should I use useMemo here?
     const groupedNotesByDay = (() => {
-        console.log('count')
+        console.log('todo: bug is here, many component reloads')
+
         return notes.reduce((acc, note) => {
             let day = moment(note.created_at);
             day.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
@@ -45,6 +46,10 @@ export default function NotesList({ notes }) {
             return acc;
         }, []);
     })();
+
+    if (!notes.length) return (
+        <Text style={{marginTop: 20}}>You don't have any notes yet. Write something!</Text>
+    );
 
     return (
         <FlatList
