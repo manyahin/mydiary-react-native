@@ -29,11 +29,11 @@ export default function WriteScreen({ navigation }) {
     };
 
     const writeMessage = () => {
-        if (!message.length) setErrorNotification('You should provide a text');
+        if (!message.trim().length) setErrorNotification('You should provide a text');
         else {
             Db.addNote(message)
                 .then(data => {
-                    const message = `You wrote ${data.messageLength} chars`;
+                    const message = `You wrote ${data.count_symbols} chars`;
                     setMessageNotification(message);
                 })
                 .then(setMessage(''))

@@ -18,6 +18,6 @@ export const fullScreen = {
 
 export const baseContainer = {
   flexGrow: 1,
-  paddingHorizontal: spacing.mini,
+  paddingHorizontal: spacing.small,
   backgroundColor
 };

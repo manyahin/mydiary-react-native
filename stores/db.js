@@ -67,8 +67,8 @@ const localDbProvider = {
     }
     
     return {
-      'status': 'success',
-      'messageLength': note.body.length
+      ...note,
+      count_symbols: note.body.length
     }
   },
   getNotes: async () => {

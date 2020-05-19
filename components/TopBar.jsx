@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text, Button, ListItem } from 'react-native-elements';
-import Constants from 'expo-constants';
+import { Text } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import { Icon } from 'react-native-elements'
 
@@ -14,11 +13,10 @@ export default function TopBar() {
             <Text style={styles.logo}
                 onPress={() => navigation.navigate('Write')}
                 >MyDiary</Text>
-            {/* <Icon 
+            <Icon 
                 onPress={() => navigation.navigate('Menu')}
                 name="menu"
-                size={32} /> */}
-            <Text style={styles.menu} onPress={() => navigation.navigate('Menu')}>Menu</Text>
+                size={32} />
         </View>
     )
 }
@@ -31,11 +29,9 @@ const styles = StyleSheet.create({
     },
     logo: {
         fontSize: 26, 
-        fontStyle: 'italic', 
-        fontWeight: 'bold', 
         paddingLeft: 2, 
         color: 'black',
-        fontFamily: 'CaveatRegular'
+        fontFamily: 'CaveatBold'
     },
     menu: {
         paddingTop: 2,
