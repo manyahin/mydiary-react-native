@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     color: 'red',
     fontWeight: 'bold',
     paddingBottom: 20,
-    fontSize: 16
+    fontSize: 14
   },
   normalMessage: {
     color: 'black',

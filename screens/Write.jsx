@@ -9,6 +9,8 @@ import { ConfigContext } from '../stores/config';
 import { DbContext } from '../stores/db';
 import { DisplayMessage } from '../components/DisplayMessage';
 
+import * as theme from '../util/theme';
+
 export default function WriteScreen({ navigation }) {
 
     const [message, setMessage] = React.useState('');
@@ -21,7 +23,6 @@ export default function WriteScreen({ navigation }) {
     const getLastNotes = () => {
         Db.getNotes('desc', 10)
             .then(notes => {
-                console.log(notes)
                 setNotes(notes)
             })
             .catch(error => console.error(error));
@@ -72,7 +73,7 @@ export default function WriteScreen({ navigation }) {
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={theme.baseContainer}>
             <TopBar />
             <View>
                 <TextInput
@@ -101,11 +102,6 @@ export default function WriteScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 10
-    },
     textarea: {
         borderWidth: 1,
         borderColor: 'grey',

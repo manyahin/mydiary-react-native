@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Button, Input, Text } from 'react-native-elements';
 import axios from 'axios';
@@ -6,18 +6,14 @@ import axios from 'axios';
 import { AuthContext } from '../stores/auth';
 import { DisplayMessage } from '../components/DisplayMessage';
 
+import * as theme from '../util/theme';
+
 export default function LoginScreen({ navigation }) {
     const [email, onChangeEmail] = React.useState('');
     const [password, onChangePassword] = React.useState('');
     const [notificationOptions, setNotification] = React.useState(null);
 
     const { signIn } = React.useContext(AuthContext);
-
-    const setError = (message) => {
-        setErrorMessage(message);
-        // hide message after 1 second
-        setTimeout(() => setErrorMessage(null), 2000);
-    }
 
     const setErrorNotification = (message) => {
         setNotification(prevState => {
@@ -74,11 +70,9 @@ export default function LoginScreen({ navigation }) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
+        ...theme.fullScreen,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 50
     },
     title: {
         fontSize: 60,

@@ -1,10 +1,12 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, View, Text } from 'react-native';
 
-export default function() {
+import * as theme from '../util/theme';
+
+export default function Loading() {
     return (
         <View style={styles.container}>
-            <ActivityIndicator size="large" color="#0000ff" />
+            <ActivityIndicator size="small" color="#111" />
             <Text style={styles.message}>Loading...</Text>
         </View>
     );
@@ -12,8 +14,7 @@ export default function() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
+        ...theme.baseContainer,
         alignItems: 'center',
         justifyContent: 'center',
     },

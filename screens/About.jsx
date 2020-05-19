@@ -2,17 +2,18 @@ import React from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-elements';
 
+import TopBar from '../components/TopBar';
 import * as theme from '../util/theme';
 
-import TopBar from '../components/TopBar';
+export default function About({ navigation }) {
 
-export default function CalendarScreen({ navigation }) {
     return (
         <View style={theme.baseContainer}>
             <TopBar/>
             <View>
-                <Text>In developming...</Text>
+                <Text h1>About</Text>
+                <Text>Open Source</Text>
             </View>
         </View>
     )
-}
+};

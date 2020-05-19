@@ -3,7 +3,8 @@ import * as Font from 'expo-font';
 import axios from 'axios';
 
 import Screens from './screens/Screens'
-import SplashScreen from './screens/Splash';
+import Loading from './screens/Loading';
+
 import { AuthContextProvider } from './stores/auth';
 import { ConfigContextProvider } from './stores/config';
 import { DbContextProvider } from './stores/db';
@@ -13,6 +14,8 @@ import ConfigFile from './config';
 axios.defaults.baseURL = ConfigFile.db.uri;
 // axios.defaults.headers.common['Authorization'] = auth.getToken()
 // axios.defaults.headers.post['Content-Type'] = 'application/json'
+
+// global.Buffer = require('buffer').Buffer;
 
 export default function App() {
 
@@ -50,7 +53,7 @@ export default function App() {
           {ready ? (
             <Screens />
           ) : (
-            <SplashScreen />
+            <Loading />
           )}
         </DbContextProvider>
       </ConfigContextProvider>

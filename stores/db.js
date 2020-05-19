@@ -50,8 +50,6 @@ const remoteDBProvider = {
 
 const localDbProvider = {
   addNote: async (body) => {
-    console.log('add note');
-
     const note = {};
     note.id = uuidv1();
     note.created_at = new Date();
@@ -74,9 +72,6 @@ const localDbProvider = {
     }
   },
   getNotes: async () => {
-    
-    console.log('get notes');
-
     const notes = JSON.parse(await AsyncStorage.getItem('@notes')) || [];
 
     return notes;

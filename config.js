@@ -3,5 +3,5 @@ export default {
         uri: `https://d.stage.manyahin.ru/api/`
     },
     displayLastNotes: true,
-    offlineMode: true
+    offlineMode: false
 }

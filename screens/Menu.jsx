@@ -1,39 +1,52 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Button, Divider } from 'react-native-elements';
-import Constants from 'expo-constants';
+import { Button } from 'react-native-elements';
 
 import TopBar from '../components/TopBar';
 import { AuthContext } from '../stores/auth';
 import { ConfigContext } from '../stores/config';
+
+import * as theme from '../util/theme';
 
 export default function MenuScreen({ navigation }) {
 
     const { signOut } = React.useContext(AuthContext);
     const { config } = React.useContext(ConfigContext);
 
+    const menus = [
+        {
+            name: 'Home / Write page',
+            link: 'Write'
+        },
+        {
+            name: 'Read page',
+            link: 'Read'
+        },
+        {
+            name: 'Calendar',
+            link: 'Calendar'
+        },
+        {
+            name: 'Settings',
+            link: 'Settings'
+        },
+        {
+            name: 'About',
+            link: 'About'
+        },
+    ]
+
     return (
-        <View style={styles.container}>
+        <View style={theme.baseContainer}>
             <TopBar/>
             <View>
-                <Button style={styles.block}
-                    onPress={() => navigation.navigate('Write')}
-                    title="Home / Write page" />
-
-                <Button style={styles.block}
-                    onPress={() => navigation.navigate('Read')}
-                    title="Read page" />
-
-                <Button style={styles.block}
-                    onPress={() => navigation.navigate('Calendar')}
-                    title="Calendar"
-                />
-
-                <Button style={styles.block}
-                    onPress={() => navigation.navigate('Settings')}
-                    title="Settings"
-                />
-
+                {menus.map(menu => (
+                    <Button style={styles.block}
+                        onPress={() => navigation.navigate(menu.link)}
+                        title={menu.name} 
+                        key={menu.link}
+                    />
+                ))}
                 { !config.offlineMode && (
                     <Button style={styles.block}
                         onPress={() => signOut()}
@@ -47,12 +60,6 @@ export default function MenuScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        marginTop: Constants.statusBarHeight,
-        padding: 10
-    },
     block: {
         marginTop: 10
     }

@@ -27,14 +27,12 @@ const styles = StyleSheet.create({
     topbar: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingTop: Constants.statusBarHeight,
-        marginBottom: 10  
+        paddingVertical: 10
     },
     logo: {
         fontSize: 26, 
         fontStyle: 'italic', 
         fontWeight: 'bold', 
-       
         paddingLeft: 2, 
         color: 'black',
         fontFamily: 'CaveatRegular'

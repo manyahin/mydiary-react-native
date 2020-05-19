@@ -62,7 +62,6 @@ export function AuthContextProvider({ children }) {
 
       try {
         userToken = await AsyncStorage.getItem('@user_token');
-        console.log('UserToken: ' + userToken)
       } catch (e) {
         // Restoring token failed
         console.error(e);

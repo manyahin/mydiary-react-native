@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import Constants from 'expo-constants';
+import { View } from 'react-native';
 
 import NotesList from '../components/NotesList';
 import TopBar from '../components/TopBar';
 import { DbContext } from '../stores/db';
+import { ScrollView } from 'react-native-gesture-handler';
+
+import * as theme from '../util/theme';
 
 export default function ReadScreen({ navigation }) {
 
     const [notes, setNotes] = React.useState([]);
+
     const Db = React.useContext(DbContext);
 
     useEffect(() => {
@@ -20,22 +23,11 @@ export default function ReadScreen({ navigation }) {
     }, []);
 
     return (
-        <View style={styles.container}>
+        <View style={theme.baseContainer}>
             <TopBar/>
-            <View>
-                {/* <Text h4>Read Screen</Text> */}
+            <ScrollView>
                 <NotesList notes={notes}></NotesList>
-            </View>
+            </ScrollView>
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        marginTop: Constants.statusBarHeight,
-        padding: 10
-    }
-});
-

@@ -1,17 +1,18 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
-import Constants from 'expo-constants';
+import { View, Text } from 'react-native';
 import { CheckBox } from 'react-native-elements'
 
 import TopBar from '../components/TopBar';
 import { ConfigContext } from '../stores/config';
+
+import * as theme from '../util/theme';
 
 export default function SettingsScreen() {
 
     const { config, updateConfig } = React.useContext(ConfigContext);
 
     return (
-        <View style={styles.container}>
+        <View style={theme.baseContainer}>
             <TopBar/>
             <View>
                 <CheckBox
@@ -22,7 +23,6 @@ export default function SettingsScreen() {
                 <CheckBox
                     title='Offline mode'
                     disabled={true}
-                    style={styles.disableCheckBox}
                     checked={config.offlineMode}
                     onPress={() => updateConfig({offlineMode: !config.offlineMode})}
                 />
@@ -31,12 +31,3 @@ export default function SettingsScreen() {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        marginTop: Constants.statusBarHeight,
-        padding: 10
-    }
-});
