@@ -33,7 +33,7 @@ export default {
             notes.sort((noteA, noteB) => noteA.created_at < noteB.created_at );
         }
 
-        return notes;
+        return notes.slice(0, limit);
     },
     // probably you don't want to call it
     deleteAllNotes: async () => {
