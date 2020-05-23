@@ -1,91 +1,11 @@
 import React from 'react';
-import { AsyncStorage } from 'react-native';
-import axios from 'axios';
-import { v1 as uuidv1 } from 'react-native-uuid';
 
 import { ConfigContext } from './config';
 
+import localDbProvider from './db-providers/local';
+import remoteDbProvider from './db-providers/remote';
+
 export const DbContext = React.createContext();
-
-const remoteDBProvider = {
-  getNotes: async (sort = 'asc', limit = 50) => {
-    const userToken = await AsyncStorage.getItem('@user_token');
-
-    const url = `Notes?filter=${JSON.stringify({ order: `created_at ${sort}`, limit })}`;
-
-    try {
-      const data = await axios.get(url, {
-        headers: { 'Authorization': userToken }
-      })
-
-      return data.data;
-    }
-    catch (err) {
-      console.error(err);
-
-      return [];
-    }
-  },
-  addNote: async (body) => {
-    const note = {};
-    note.created_at = new Date();
-    note.body = body;
-
-    const userToken = await AsyncStorage.getItem('@user_token');
-
-    try {
-      const data = await axios.post('Notes', note, {
-        headers: { 'Authorization': userToken }
-      })
-
-      return data.data;
-    }
-    catch (err) {
-      console.error(err);
-
-      return [];
-    }
-  }
-};
-
-const localDbProvider = {
-  addNote: async (body) => {
-    const note = {};
-    note.id = uuidv1();
-    note.created_at = new Date();
-    note.body = body;
-
-    try {
-      const notes = JSON.parse(await AsyncStorage.getItem('@notes')) || [];
-
-      notes.push(note);
-
-      await AsyncStorage.setItem('@notes', JSON.stringify(notes));
-    }
-    catch (err) {
-      console.error('Error while adding new note', err);
-    }
-    
-    return {
-      ...note,
-      count_symbols: note.body.length
-    }
-  },
-  getNotes: async () => {
-    const notes = JSON.parse(await AsyncStorage.getItem('@notes')) || [];
-
-    return notes;
-  },
-  // probably you don't want to call it
-  deleteAllNotes: async () => {
-    try {
-      await AsyncStorage.removeItem('@notes');
-    }
-    catch (err) {
-      console.error('Error while deleting notes', err);
-    }
-  }
-};
 
 export function DbContextProvider({ children }) {
 
