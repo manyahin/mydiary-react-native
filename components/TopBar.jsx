@@ -2,7 +2,8 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import { Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements';
+import { t } from '../i18n';
 
 export default function TopBar() {
     
@@ -12,7 +13,7 @@ export default function TopBar() {
         <View style={styles.topbar}>
             <Text style={styles.logo}
                 onPress={() => navigation.navigate('Write')}
-                >MyDiary</Text>
+            >{t('myDiary')}</Text>
             <Icon 
                 onPress={() => navigation.navigate('Menu')}
                 name="menu"
