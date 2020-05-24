@@ -11,7 +11,7 @@ export default function About({ navigation }) {
         <View style={theme.baseContainer}>
             <TopBar/>
             <View>
-                <Text h1>About</Text>
+                <Text h2>About</Text>
                 <Text>Open Source</Text>
             </View>
         </View>

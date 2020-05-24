@@ -22,9 +22,7 @@ export default function WriteScreen({ navigation }) {
 
     const getLastNotes = () => {
         Db.getNotes('desc', 10)
-            .then(notes => {
-                setNotes(notes)
-            })
+            .then(setNotes)
             .catch(error => console.error(error));
     };
 

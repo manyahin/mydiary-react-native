@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import moment from 'moment';
 
@@ -7,7 +7,6 @@ import * as theme from '../util/theme';
 
 import TopBar from '../components/TopBar';
 import { DbContext } from '../stores/db';
-import { render } from 'react-dom';
 
 export default function CalendarScreen({ navigation }) {
 
@@ -24,7 +23,7 @@ export default function CalendarScreen({ navigation }) {
                         const day = moment(curr).startOf('day').format('YYYY-MM-DD');
 
                         if (acc.has(day)) acc.set(day, acc.get(day) + 1);
-                        else acc.set(day, 0);
+                        else acc.set(day, 1);
 
                         return acc;
                     }, new Map());
@@ -71,25 +70,72 @@ export default function CalendarScreen({ navigation }) {
                 return calendar;
             })
             .then(calendar => {
-                console.log(calendar);
                 setCalendar(calendar);
             })
     }, []);
 
+    const styles = StyleSheet.create({
+        day: {
+            height: 30,
+            width: 30,
+            backgroundColor: 'pink',
+            margin: 5,
+            alignItems: 'center',
+            justifyContent: 'center'
+        },
+        days: {
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap'
+        }
+    });
 
-    const renderCalendar = (calendar) => {
-        return Object.entries(calendar).map(([year, monthes]) => {
-            let ret = (<Text>{year}</Text>);
-            return ret + renderMonthes(monthes);
+    const Day = (params) => {
+        const isActiveDay = params.day.cnt > 0 ? true : false;
+        const bgColor = isActiveDay ? 'green' : 'white';
+        const pressCb = () => {
+            if (!isActiveDay) return;
+            return navigation.navigate('Read', {
+                day: params.day.format
+            });
+        }
+        return (
+            <View style={[styles.day, { backgroundColor: bgColor }]}>
+                <Text onPress={pressCb}>{params.number}</Text>
+            </View>
+        )
+    };
+
+    const Days = (params) => {
+        return (
+            <View style={styles.days}>
+                {Object.entries(params.days).map(([number, day]) => {
+                    return <Day key={day.format} number={number} day={day}></Day>
+                })}
+            </View>
+        );
+    };
+
+    const renderMonthes = (monthes) => {
+        return Object.entries(monthes).map(([month, days]) => {
+            const monthHeader = <Text h4>{month}</Text>;
+            const formattedDays = <Days days={days}></Days>
+            return [monthHeader, formattedDays];
         });
     };
 
- 
+    const renderCalendar = (calendar) => {
+        return Object.entries(calendar).map(([year, monthes]) => {
+            const yearHeader = <Text h3>{year}</Text>;
+            const monthesAndDays = renderMonthes(monthes);
+            return [yearHeader, monthesAndDays];
+        });
+    };
+
     return (
         <View style={theme.baseContainer}>
             <TopBar />
             <View>
-                <Text>In developming...</Text>
                 {renderCalendar(calendar)}
             </View>
         </View>

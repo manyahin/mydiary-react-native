@@ -27,12 +27,13 @@ function DayNotes({ day, notes }) {
     );
 }
 
-export default function NotesList({ notes }) {
-    // todo: should I use useMemo here?
-    const groupedNotesByDay = (() => {
-        console.log('todo: bug is here, many component reloads')
+  export default class NotesList extends React.PureComponent {
+    constructor(props) {
+        super(props);
+    }
 
-        return notes.reduce((acc, note) => {
+    groupedNotesByDay () {
+        return this.props.notes.reduce((acc, note) => {
             let day = moment(note.created_at);
             day.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
 
@@ -45,20 +46,22 @@ export default function NotesList({ notes }) {
 
             return acc;
         }, []);
-    })();
+    }
 
-    if (!notes.length) return (
-        <Text style={{marginTop: 20}}>You don't have any notes yet. Write something!</Text>
-    );
+    render () {
+        if (!this.props.notes.length) return (
+            <Text style={{marginTop: 20}}>You don't have any notes yet. Write something!</Text>
+        );
 
-    return (
-        <FlatList
-            data={groupedNotesByDay}
-            renderItem={({ item }) => <DayNotes day={item.day} notes={item.notes}></DayNotes>}
-            keyExtractor={item => item.index}
-            style={{ marginTop: 20 }}
-        />
-    );
+        return (
+            <FlatList
+                data={this.groupedNotesByDay()}
+                renderItem={({ item }) => <DayNotes day={item.day} notes={item.notes}></DayNotes>}
+                keyExtractor={item => item.index}
+                style={{ marginTop: 20 }}
+            />
+        );
+    }
 }
 
 const styles = StyleSheet.create({

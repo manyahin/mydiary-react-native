@@ -15,8 +15,6 @@ axios.defaults.baseURL = ConfigFile.db.uri;
 // axios.defaults.headers.common['Authorization'] = auth.getToken()
 // axios.defaults.headers.post['Content-Type'] = 'application/json'
 
-// global.Buffer = require('buffer').Buffer;
-
 export default function App() {
 
   const [ready, setReady] = React.useState(false);

@@ -8,7 +8,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import * as theme from '../util/theme';
 
-export default function ReadScreen({ navigation }) {
+export default function ReadScreen({ route, navigation }) {
 
     const [notes, setNotes] = React.useState([]);
 
@@ -16,7 +16,12 @@ export default function ReadScreen({ navigation }) {
 
     useEffect(() => {
         const boot = async () => {
-            setNotes(await Db.getNotes());
+            if (route && route.params) {
+                const { day } = route.params;
+                setNotes(await Db.getNotesForSpecificDay(day));
+            } else {
+                setNotes(await Db.getNotes());
+            }
         }
 
         boot();
@@ -24,7 +29,7 @@ export default function ReadScreen({ navigation }) {
 
     return (
         <View style={theme.baseContainer}>
-            <TopBar/>
+            <TopBar />
             <ScrollView>
                 <NotesList notes={notes}></NotesList>
             </ScrollView>
