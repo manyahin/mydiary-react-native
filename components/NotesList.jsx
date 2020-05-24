@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import moment from 'moment';
@@ -27,7 +27,7 @@ function DayNotes({ day, notes }) {
     );
 }
 
-  export default class NotesList extends React.PureComponent {
+export default class NotesList extends React.PureComponent {
     constructor(props) {
         super(props);
     }
