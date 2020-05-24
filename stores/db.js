@@ -16,7 +16,7 @@ export function DbContextProvider({ children }) {
   if (config.offlineMode) {
     dbContext = localDbProvider;
   } else {
-    dbContext = remoteDBProvider;
+    dbContext = remoteDbProvider;
   }
 
   return (
