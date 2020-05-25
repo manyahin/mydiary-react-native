@@ -63,5 +63,13 @@ export default {
     searchNotes: async (text) => {
         const notes = JSON.parse(await AsyncStorage.getItem('@notes')) || [];
         return notes.filter(note => note.body.includes(text));
+    },
+    favoriteNote: async (note) => {
+        const notes = JSON.parse(await AsyncStorage.getItem('@notes')) || [];
+
+        const noteToUpdate = notes.find(note => note.id === note.id);
+        noteToUpdate.favorite = true;
+
+        await AsyncStorage.setItem('@notes', JSON.stringify(notes));
     }
 };

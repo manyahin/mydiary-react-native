@@ -1,14 +1,32 @@
 import React from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Text, Icon } from 'react-native-elements';
 import moment from 'moment';
+
+import { DbContext } from '../stores/db';
 
 function Note({ note }) {
     const time = moment(note.created_at).format("HH:mm");
+    const starColor = note.favorite ? "#EFCE4A" : 'lightgrey';
+
+    const Db = React.useContext(DbContext);
+
+    const favoriteNote = async (note) => {
+        await Db.favoriteNote(note);
+        note.favorite = true;
+    };
 
     return (
         <View style={styles.note}>
-            <Text style={styles.time}>{time}</Text>
+            <View style={styles.noteHeader}>
+                <Text style={styles.time}>{time}</Text>
+                <Icon 
+                    name="star"
+                    size={18} 
+                    color={starColor}
+                    onPress={favoriteNote}
+                    />
+            </View>
             <Text style={styles.body}>{note.body}</Text>
         </View>
     );
@@ -66,7 +84,15 @@ export default class NotesList extends React.PureComponent {
 
 const styles = StyleSheet.create({
     note: {
-        marginBottom: 10
+        marginBottom: 10,
+        flex: 1
+    },
+    noteHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    star: {
+
     },
     date: {
         color: 'grey'

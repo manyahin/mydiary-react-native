@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Text } from 'react-native-elements';
+import { Text, Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
-import { Icon } from 'react-native-elements'
 
 export default function TopBar() {
     

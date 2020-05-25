@@ -111,5 +111,8 @@ export default {
         });
 
         return data;
+    },
+    favoriteNote: async (text) => {
+        
     }
 };
