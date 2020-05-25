@@ -67,7 +67,7 @@ export default {
     },
     getNotesForSpecificDay: async (day) => {
         const userToken = await AsyncStorage.getItem('@user_token');
-        
+
         const startOfDay = moment(day).startOf('day');
         const endOfDay = moment(day).endOf('day');
 
@@ -87,6 +87,23 @@ export default {
                 ]
             },
             order: 'created_at ASC'
+        }
+
+        let { data } = await axios.get('Notes?filter=' + JSON.stringify(filter), {
+            headers: { 'Authorization': userToken }
+        });
+
+        return data;
+    },
+    searchNotes: async (text) => {
+        const userToken = await AsyncStorage.getItem('@user_token');
+
+        const filter = {
+            where: {
+                '$text': {
+                    search: text
+                }
+            }
         }
 
         let { data } = await axios.get('Notes?filter=' + JSON.stringify(filter), {

@@ -59,5 +59,9 @@ export default {
             const date = moment(note.created_at);
             return date > startOfDay && date < endOfDay;
         });
+    },
+    searchNotes: async (text) => {
+        const notes = JSON.parse(await AsyncStorage.getItem('@notes')) || [];
+        return notes.filter(note => note.body.includes(text));
     }
 };
