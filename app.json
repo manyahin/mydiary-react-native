@@ -26,6 +26,10 @@
       "bundleIdentifier": "com.manyahin.mydiary",
       "buildNumber": "1.0.0",
       "supportsTablet": true
-    }
+    },
+    "android": {
+      "package": "com.manyahin.mydiary"
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
   }
 }
